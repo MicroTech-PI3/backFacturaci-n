@@ -1,8 +1,11 @@
 import { Router } from "express";
 
-import { getProducts } from "../controller/controller.js";
+import {
+  getProducts, insertProductos,
+} from "../controller/controller.js";
 
 //cambiar el nombre del endpoint
 const router = Router();
-router.get("/product/:IdProduct", getProducts);
-export default router;
+router.get("/product/:IdProduct", getProducts); 
+router.post("/product/compra", insertProductos)
+
