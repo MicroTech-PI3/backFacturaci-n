@@ -30,6 +30,8 @@ export const getProducts = async (req, res) => {
 
 
 
+
+
 //funcion de ingresar carrito a la DB
 export const insertProductos = async (req, res) => {
   
