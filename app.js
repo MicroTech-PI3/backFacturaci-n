@@ -1,5 +1,5 @@
 import express, { json } from "express";
-import router from "./routes/routes.js";
+import {router} from "./routes/routes.js";
 import createError from "http-errors"; // Importa el módulo para manejar situaciones de error HTTP
 import cors from "cors"; // Importa el módulo CORS para habilitar el intercambio de recursos entre diferentes dominios en el navegador web.
 import http from "http";
