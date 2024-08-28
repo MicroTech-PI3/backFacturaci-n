@@ -9,7 +9,7 @@ export const getProducts = async (req, res) => {
     console.log("iniciando la conexion");
     console.log(req.params.IdProduct);
     const rows = await conn.query(
-      "SELECT * FROM product WHERE ID=" +
+      "SELECT * FROM PRODUCT WHERE ID=" +
         req.params.IdProduct +
         ";"
     );
@@ -36,7 +36,7 @@ export const getProducts = async (req, res) => {
 export const insertProductos = async (req, res) => {
   
 
-  const query = "INSERT INTO `mydb`.`SOLD_ITEMS` (`ID`, `CUSTOMER_ID`, `EMPLOYEE_ID`, `DATE`) VALUES (?, ?, ?, ?)";
+  const query = "INSERT INTO `SOLD_ITEMS` (`ID`, `CUSTOMER_ID`, `EMPLOYEE_ID`, `DATE`) VALUES (?, ?, ?, ?)";
 const values = [
     req.body.id_producto,
     req.body.customer_id,
