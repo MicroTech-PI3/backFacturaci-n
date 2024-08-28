@@ -1,14 +1,47 @@
+version: '3.8'
 services:
-  pagos:
-    image: davopaco/lista_deseos:latest
+  mariadb:
+    image: lexabernal/db_microtech:arm64
+    environment:
+      - MARIADB_ROOT_PASSWORD=my-password
+      - MARIADB_DATABASE=my-database
+      - MARIADB_USER=my-user
+      - MARIADB_PASSWORD=my-user-password
+    volumes:
+      - mariadb-data:/var/lib/mysql
     ports:
-      - "4000:3000"
+      - "3307:3306"
+
+  billsender:
+    image: lexabernal/bill_sender:arm64
+    environment:
+      - PORT=3000
+      - HOST=microtech.icu
+      - SMTP_SERVER=smtp.mailersend.net
+      - SMTP_PORT=587
+      - SMTP_LOGIN=MS_xJlnpH@microtech.icu
+      - SMTP_PASSWORD=3DxIp0kA1aIaPuvu
+      - DB_HOST=mariadb
+      - DB_PORT=3307
+      - DB_USER=root
+      - DB_PASSWORD=my-password
+      - DATABASE=MICROTECH
+    ports:
+    - "8888:3000"
+
+  backfacturacion:
+    image: lexabernal/back_facturacion:arm64
     environment:
       - APP_PORT=3000
-      - DB_HOST=buey.thenexusbattlesii.online
+      - DB_HOST=mariadb
       - DB_PORT=3307
       - DB_USER=root
       - DB_PASSWORD=my-password
       - DB_DATABASE=MICROTECH
-      - HOST=https://gateway.thenexusbattlesii.online
+      - HOST=microtech.icu
       
+    ports:
+      -"6969:3000"
+
+volumes:
+  mariadb-data:
