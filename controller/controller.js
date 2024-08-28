@@ -26,3 +26,33 @@ export const getProducts = async (req, res) => {
     if (conn) conn.end();
   }
 };
+
+
+
+
+//funcion de ingresar carrito a la DB
+export const insertProductos = async (req, res) => {
+  
+
+  const query = "INSERT INTO `mydb`.`SOLD_ITEMS` (`ID`, `CUSTOMER_ID`, `EMPLOYEE_ID`, `DATE`) VALUES (?, ?, ?, ?)";
+const values = [
+    req.body.id_producto,
+    req.body.customer_id,
+    req.body.employee_id,
+    req.body.date
+];
+
+pool.getConnection()
+    .then(conn => {
+        return conn.query(query, values);
+    })
+    .then(res.status(200).json({
+        status: "Se realizó el registro del producto"
+    }))
+    .catch(err => {
+        console.error("Insertion error: ", err);
+
+    });
+
+};
+
