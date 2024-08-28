@@ -8,4 +8,4 @@ import {
 const router = Router();
 router.get("/product/:IdProduct", getProducts); 
 router.post("/product/compra", insertProductos)
-export default router;
+
