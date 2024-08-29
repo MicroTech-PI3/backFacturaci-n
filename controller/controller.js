@@ -36,16 +36,12 @@ export const getProducts = async (req, res) => {
 export const insertProductos = async (req, res) => {
   const products = req.body; // Asumiendo que req.body es un array de productos.
 console.log(products)
-  const query = "INSERT INTO `SOLD_ITEMS` (`ID`, `NAME`, `PRICE`, `DESCRIPTION`, `QUANTITY`, `CATEGORY_ID`, `SUPPLIER_ID`) VALUES ?";
+  const query = "INSERT INTO `SOLD_ITEMS` (`ID`,`DATE` ) VALUES ?";
   
   const values = products.map(product => [
       product.ID,
       product.NAME,
-      product.PRICE,
-      product.DESCRIPTION,
-      product.QUANTITY,
-      product.CATEGORY_ID,
-      product.SUPPLIER_ID
+      
   ]);
 
   try {
