@@ -34,27 +34,34 @@ export const getProducts = async (req, res) => {
 
 //funcion de ingresar carrito a la DB
 export const insertProductos = async (req, res) => {
+  const products = req.body; // Asumiendo que req.body es un array de productos.
+
+  const query = "INSERT INTO `SOLD_ITEMS` (`ID`, `NAME`, `PRICE`, `DESCRIPTION`, `QUANTITY`, `CATEGORY_ID`, `SUPPLIER_ID`) VALUES ?";
   
+  const values = products.map(product => [
+      product.ID,
+      product.NAME,
+      product.PRICE,
+      product.DESCRIPTION,
+      product.QUANTITY,
+      product.CATEGORY_ID,
+      product.SUPPLIER_ID
+  ]);
 
-  const query = "INSERT INTO `SOLD_ITEMS` (`ID`, `CUSTOMER_ID`, `EMPLOYEE_ID`, `DATE`) VALUES (?, ?, ?, ?)";
-const values = [
-    req.body.id_producto,
-    req.body.customer_id,
-    req.body.employee_id,
-    req.body.date
-];
-
-pool.getConnection()
-    .then(conn => {
-        return conn.query(query, values);
-    })
-    .then(res.status(200).json({
-        status: "Se realizó el registro del producto"
-    }))
-    .catch(err => {
-        console.error("Insertion error: ", err);
-
-    });
-
+  try {
+      const conn = await pool.getConnection();
+      await conn.query(query, [values]);
+      res.status(200).json({
+          status: "Se realizó el registro de los productos"
+      });
+      conn.release();
+  } catch (err) {
+      console.error("Insertion error: ", err);
+      res.status(500).json({
+          status: "Hubo un error al registrar los productos",
+          error: err.message
+      });
+  }
 };
+
 
