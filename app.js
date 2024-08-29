@@ -28,7 +28,7 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 
 // error 404 (no encontrado)
 app.use(function (req, res, next) {
-  next(createError(404));
+  res.status(404).send('not found!!')
 });
 
 // PORT
