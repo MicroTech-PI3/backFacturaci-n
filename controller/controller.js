@@ -32,26 +32,33 @@ export const getProducts = async (req, res) => {
 
 
 
-//funcion de ingresar carrito a la DB
 export const insertProductos = async (req, res) => {
   const products = req.body; // Asumiendo que req.body es un array de productos.
-console.log(products)
-  const query = "INSERT INTO `SOLD_ITEMS` (`ID`,`DATE`,`CUSTOMER_ID`, `EMPLOYEE_ID`) VALUES ?";
-  
-  const values = products.map(product => [
-      product.ID,
-      product.NAME,
-      1,
-      1
-      
-  ]);
+  const currentDate = new Date().toISOString().slice(0, 10); // Obtener la fecha de hoy
 
   try {
       const conn = await pool.getConnection();
-      await conn.query(query, [values]);
+
+      // Obtener el último ID
+      /* const [rows] = await conn.query("SELECT MAX(ID) AS lastID FROM SOLD_ITEMS");
+      let lastID = rows[0].lastID || 0; // Si no hay ningún ID, empezar desde 0 */
+
+      for (const product of products) {
+           // Incrementar el ID para el siguiente producto
+          const query = "INSERT INTO `SOLD_ITEMS` (`DATE`, `CUSTOMER_ID`, `EMPLOYEE_ID`) VALUES ( ?, ?, ?)";
+          const values = [
+                   // Usar el nuevo ID incrementado
+              currentDate, // Usar la fecha actual
+              1,           // CUSTOMER_ID o el valor que corresponda
+              1            // EMPLOYEE_ID o el valor que corresponda
+          ];
+          await conn.query(query, values);
+      }
+
       res.status(200).json({
           status: "Se realizó el registro de los productos"
       });
+
       conn.release();
   } catch (err) {
       console.error("Insertion error: ", err);
@@ -61,5 +68,3 @@ console.log(products)
       });
   }
 };
-
-
