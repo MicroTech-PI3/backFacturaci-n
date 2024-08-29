@@ -33,28 +33,56 @@ export const getProducts = async (req, res) => {
 
 
 export const insertProductos = async (req, res) => {
+  let temp_ID = null;
   const products = req.body;
   const currentDate = new Date().toISOString().slice(0, 10); 
   console.log(" ===================================")
-  console.log(products)
+  console.log(products.length)
   try {
       const conn = await pool.getConnection();
-
+      const query = "INSERT INTO `SOLD_ITEMS` (`DATE`, `CUSTOMER_ID`, `EMPLOYEE_ID`) VALUES ( ?, ?, ?)";
+      const values = [
+          currentDate, 
+          1,           
+          1           
+      ];
+      await conn.query(query, values);
+      const id_carro= await conn.query("SELECT `ID` FROM `SOLD_ITEMS` ORDER BY `ID` DESC LIMIT 1");
+      console.log(id_carro)
 
       for (const product of products) {
-           // Incrementar el ID para el siguiente producto
-          const query = "INSERT INTO `SOLD_ITEMS` (`DATE`, `CUSTOMER_ID`, `EMPLOYEE_ID`) VALUES ( ?, ?, ?)";
+
+        if(temp_ID===product.ID){
+
+          const query2 = `
+          UPDATE \`SOLD_ITEMS_has_PRODUCT\`
+          SET \`QUANTITY\` = \`QUANTITY\` + 1
+          WHERE \`SOLD_ITEMS_ID\` = ? AND \`PRODUCT_ID\` = ?;
+      `;
+
+      const values2 = [id_carro[0].ID, product.ID];
+      await conn.query(query2, values2);
+        console.log('Cantidad actualizada correctamente.');
+         
+        }else{
+          const query = "INSERT INTO `SOLD_ITEMS_has_PRODUCT` (`SOLD_ITEMS_ID`, `PRODUCT_ID`, `QUANTITY`) VALUES ( ?, ?, ?)";
           const values = [
-                   // Usar el nuevo ID incrementado
-              currentDate, // Usar la fecha actual
-              1,           // CUSTOMER_ID o el valor que corresponda
-              1            // EMPLOYEE_ID o el valor que corresponda
-          ];
-          await conn.query(query, values);
+              id_carro[0].ID, 
+              product.ID,           
+              1 ]
+              await conn.query(query, values);
+
+        }
+;
+       
+      await conn.query(query, values);
+      temp_ID=product.ID;
+         
       }
 
       res.status(200).json({
-          status: "Se realizó el registro de los productos"
+          status: "Se realizó el registro del carrito!!",
+          'id_carro':id_carro
       });
 
       conn.release();
