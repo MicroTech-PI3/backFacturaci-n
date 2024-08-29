@@ -7,13 +7,13 @@ export const getProducts = async (req, res) => {
   try {
     conn = await pool.getConnection();
     console.log("iniciando la conexion");
-    console.log(req.params.IdProduct);
+    
     const rows = await conn.query(
       "SELECT * FROM PRODUCT WHERE ID=" +
         req.params.IdProduct +
         ";"
     );
-    console.log(rows);
+    
     if (rows.length > 0) {
       res.json(rows[0]);
     } else {
@@ -33,15 +33,13 @@ export const getProducts = async (req, res) => {
 
 
 export const insertProductos = async (req, res) => {
-  const products = req.body; // Asumiendo que req.body es un array de productos.
-  const currentDate = new Date().toISOString().slice(0, 10); // Obtener la fecha de hoy
-
+  const products = req.body;
+  const currentDate = new Date().toISOString().slice(0, 10); 
+  console.log(" ===================================")
+  console.log(products)
   try {
       const conn = await pool.getConnection();
 
-      // Obtener el último ID
-      /* const [rows] = await conn.query("SELECT MAX(ID) AS lastID FROM SOLD_ITEMS");
-      let lastID = rows[0].lastID || 0; // Si no hay ningún ID, empezar desde 0 */
 
       for (const product of products) {
            // Incrementar el ID para el siguiente producto
