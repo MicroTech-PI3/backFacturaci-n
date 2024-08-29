@@ -35,7 +35,7 @@ export const getProducts = async (req, res) => {
 //funcion de ingresar carrito a la DB
 export const insertProductos = async (req, res) => {
   const products = req.body; // Asumiendo que req.body es un array de productos.
-
+console.log(products)
   const query = "INSERT INTO `SOLD_ITEMS` (`ID`, `NAME`, `PRICE`, `DESCRIPTION`, `QUANTITY`, `CATEGORY_ID`, `SUPPLIER_ID`) VALUES ?";
   
   const values = products.map(product => [
