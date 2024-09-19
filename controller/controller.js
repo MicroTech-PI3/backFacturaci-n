@@ -7,11 +7,9 @@ export const getProducts = async (req, res) => {
   try {
     conn = await pool.getConnection();
     console.log("iniciando la conexion");
-
     const rows = await conn.query(
       "SELECT * FROM PRODUCT WHERE ID=" + req.params.IdProduct + ";"
     );
-
     if (rows.length > 0) {
       res.json(rows[0]);
     } else {
@@ -83,7 +81,7 @@ export const AllProducts = async (req, res) => {
   try {
     conn = await pool.getConnection();
     console.log("Iniciando la conexión");
-    const [rows] = await conn.query("SELECT * FROM PRODUCT;");
+    const rows = await conn.query("SELECT * FROM PRODUCT;");
     console.log("Datos obtenidos: ", rows); // Verifica qué datos se están obteniendo
     if (rows.length > 0) {
       res.json(rows);
