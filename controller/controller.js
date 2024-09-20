@@ -82,3 +82,43 @@ export const insertProductos = async (req, res) => {
   }
 };
 
+
+export const AllProducts = async (req, res) => {
+  let conn;
+  try {
+      conn = await pool.getConnection();
+      console.log("Iniciando la conexión");
+      const rows = await conn.query("SELECT * FROM PRODUCT;");
+      console.log("Datos obtenidos: ", rows);
+      if (rows.length > 0) {
+      res.json(rows);
+      } else {
+      res.status(404).json({ status: "No se encontraron productos" });
+      }
+  } catch (err) {
+  res.status(500).json({ status: "Error en la base de datos" });
+  console.log("Error en la base de datos", err);
+  } finally {
+  if (conn) conn.end();
+  }
+};
+
+export const DeleteProduct = async (req, res) => {
+  let conn;
+  try {
+      conn = await pool.getConnection();
+      console.log("Iniciando la conexión");
+      const rows = await conn.query("DELETE FROM PRODUCT WHERE ID= " + req.params.IdProduct + ";" );
+      console.log("Datos obtenidos: ", rows);
+      if (rows.length > 0) {
+      res.json(rows);
+      } else {
+      res.status(404).json({ status: "No se encontraron productos" });
+      }
+  } catch (err) {
+  res.status(500).json({ status: "Error en la base de datos" });
+  console.log("Error en la base de datos", err);
+  } finally {
+  if (conn) conn.end();
+  }
+};
