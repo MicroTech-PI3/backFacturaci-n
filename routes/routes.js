@@ -10,7 +10,7 @@ export const router = Router();
 router.get("/product/:IdProduct", getProducts); 
 router.post("/product/compra", insertProductos);
 router.get("/allProducts", AllProducts);
-router.delete("/product/:IDProduct", DeleteProduct);
+router.delete("/product/:IdProduct", DeleteProduct);
 
 
 
