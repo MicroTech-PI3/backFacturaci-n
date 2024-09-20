@@ -1,3 +1,4 @@
+import axios from "axios";
 import pool from "../db/database.js";
 
 // Funcion de llamar a mis cartas de lista de deseos
@@ -61,6 +62,11 @@ export const insertProductos = async (req, res) => {
       temp_ID = product.ID;
     }
 
+    // Actualizar stock de productos después de la compra
+    await axios.post("http://microtech.icu:8889/payment/update/stock", {
+      soldCartId: id_carro[0].ID,
+    });
+
     res.status(200).json({
       status: "Se realizó el registro del carrito!!",
       id_carro: id_carro,
@@ -95,4 +101,3 @@ export const AllProducts = async (req, res) => {
     if (conn) conn.end();
   }
 };
-
