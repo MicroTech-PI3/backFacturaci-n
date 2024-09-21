@@ -110,11 +110,11 @@ export const DeleteProduct = async (req, res) => {
       console.log("Iniciando la conexión");
       const rows = await conn.query("DELETE FROM PRODUCT WHERE ID= " + req.params.IdProduct + ";" );
       console.log("Datos obtenidos: ", rows);
-      if (rows.length > 0) {
-      res.json(rows);
-      } else {
-      res.status(404).json({ status: "No se encontraron productos" });
-      }
+      if (rows.affectedRows > 0) {
+        res.status(200).json({ status: "Producto eliminado correctamente" });
+    } else {
+        res.status(404).json({ status: "No se encontró el producto" });
+    }
   } catch (err) {
   res.status(500).json({ status: "Error en la base de datos" });
   console.log("Error en la base de datos", err);
