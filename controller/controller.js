@@ -1,7 +1,7 @@
 import axios from "axios";
 import pool from "../db/database.js";
 
-// Funcion de llamar a mis cartas de lista de deseos
+// Funcion para llamar productos por ID
 export const getProducts = async (req, res) => {
   let conn;
 
@@ -24,6 +24,8 @@ export const getProducts = async (req, res) => {
   }
 };
 
+
+//funcion para insertar productos en el carrito de compras
 export const insertProductos = async (req, res) => {
   let temp_ID = null;
   const products = req.body;
