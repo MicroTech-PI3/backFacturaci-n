@@ -7,8 +7,8 @@ import {
 //cambiar el nombre del endpoint
 
 export const router = Router();
-router.get("/product/:IdProduct", getProducts); 
-router.post("/product/compra", insertProductos);
+router.get("/shopcart/:IdProduct", getProducts); 
+router.post("/shopcart/compra", insertProductos);
 
 
 
