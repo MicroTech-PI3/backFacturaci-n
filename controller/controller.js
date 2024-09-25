@@ -32,7 +32,7 @@ export const insertProductos = async (req, res) => {
   const currentDate = new Date().toISOString().slice(0, 10);
   console.log(" ===================================");
   console.log(productos.length);
-  console.log()
+  console.log(req.body);
   try {
     const conn = await pool.getConnection();
     const query =
