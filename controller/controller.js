@@ -28,21 +28,24 @@ export const getProducts = async (req, res) => {
 //funcion para insertar productos en el carrito de compras
 export const insertProductos = async (req, res) => {
   let temp_ID = null;
-  const productos = req.body;
+  const products = req.body;
   const currentDate = new Date().toISOString().slice(0, 10);
   console.log(" ===================================");
-  console.log(productos.length);
+  console.log(products.length);
   console.log(req.body);
+  
   try {
     const conn = await pool.getConnection();
     const query =
       "INSERT INTO `SOLD_ITEMS` (`DATE`, `CUSTOMER_ID`, `EMPLOYEE_ID`) VALUES ( ?, ?, ?)";
     const values = [currentDate, 1, 1];
     await conn.query(query, values);
+
+    //def id_carro
     const id_carro = await conn.query(
       "SELECT `ID` FROM `SOLD_ITEMS` ORDER BY `ID` DESC LIMIT 1"
     );
-    console.log(id_carro);
+    console.log("ID del carro: ", id_carro[0].ID);
 
     for (const product of products) {
       if (temp_ID === product.ID) {
@@ -65,15 +68,17 @@ export const insertProductos = async (req, res) => {
       temp_ID = product.ID;
     }
 
+    res.json({
+      status:'approved',
+      id_carro: id_carro,
+    });
+
     // Actualizar stock de productos después de la compra
     await axios.post("http://microtech.icu:8889/payment/update/stock", {
       soldCartId: id_carro[0].ID,
     });
 
-    res.status(200).json({
-      status: "Se realizó el registro del carrito!!",
-      id_carro: id_carro,
-    });
+    
 
     conn.release();
   } catch (err) {
