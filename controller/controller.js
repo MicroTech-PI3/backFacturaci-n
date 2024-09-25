@@ -28,10 +28,11 @@ export const getProducts = async (req, res) => {
 //funcion para insertar productos en el carrito de compras
 export const insertProductos = async (req, res) => {
   let temp_ID = null;
-  const products = req.body;
+  const productos = req.body;
   const currentDate = new Date().toISOString().slice(0, 10);
   console.log(" ===================================");
-  console.log(products.length);
+  console.log(productos.length);
+  console.log()
   try {
     const conn = await pool.getConnection();
     const query =
