@@ -45,7 +45,6 @@ export const insertProductos = async (req, res) => {
     const id_carro = await conn.query(
       "SELECT `ID` FROM `SOLD_ITEMS` ORDER BY `ID` DESC LIMIT 1"
     );
-    console.log("ID del carro: ", id_carro[0].ID);
 
     for (const product of products) {
       if (temp_ID === product.ID) {
@@ -53,8 +52,7 @@ export const insertProductos = async (req, res) => {
           UPDATE \`SOLD_ITEMS_has_PRODUCT\`
           SET \`QUANTITY\` = \`QUANTITY\` + 1
           WHERE \`SOLD_ITEMS_ID\` = ? AND \`PRODUCT_ID\` = ?;
-      `;
-
+        `;
         const values2 = [id_carro[0].ID, product.ID];
         await conn.query(query2, values2);
         console.log("Cantidad actualizada correctamente.");
@@ -64,7 +62,7 @@ export const insertProductos = async (req, res) => {
         const values = [id_carro[0].ID, product.ID, 1];
         await conn.query(query, values);
       }
-      await conn.query(query, values);
+
       temp_ID = product.ID;
     }
 
