@@ -1,5 +1,6 @@
 import axios from "axios";
 import pool from "../db/database.js";
+import https from "https";
 
 // Funcion para llamar productos por ID
 export const getProducts = async (req, res) => {
@@ -24,7 +25,6 @@ export const getProducts = async (req, res) => {
   }
 };
 
-
 //funcion para insertar productos en el carrito de compras
 export const insertProductos = async (req, res) => {
   let temp_ID = null;
@@ -33,7 +33,7 @@ export const insertProductos = async (req, res) => {
   console.log(" ===================================");
   console.log(products.length);
   console.log(req.body);
-  
+
   try {
     const conn = await pool.getConnection();
     const query =
@@ -69,16 +69,23 @@ export const insertProductos = async (req, res) => {
     }
 
     res.json({
-      status:'approved',
+      status: "approved",
       id_carro: id_carro,
     });
 
     // Actualizar stock de productos después de la compra
-    await axios.post("http://microtech.icu:8889/payment/update/stock", {
-      soldCartId: id_carro[0].ID,
+
+    const agent = new https.Agent({
+      rejectUnauthorized: false,
     });
 
-    
+    await axios.post(
+      "https://gateway:5000/payment/update/stock",
+      {
+        soldCartId: id_carro[0].ID,
+      },
+      { httpsAgent: agent }
+    );
 
     conn.release();
   } catch (err) {
