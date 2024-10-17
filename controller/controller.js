@@ -28,7 +28,9 @@ export const getProducts = async (req, res) => {
 //funcion para insertar productos en el carrito de compras
 export const insertProductos = async (req, res) => {
   let temp_ID = null;
-  const products = req.body;
+  const cliente_id=parseInt(req.body.cliente_id);
+
+  const products = req.body.productos;
   const currentDate = new Date().toISOString().slice(0, 10);
   console.log(" ===================================");
   console.log(products.length);
@@ -38,7 +40,7 @@ export const insertProductos = async (req, res) => {
     const conn = await pool.getConnection();
     const query =
       "INSERT INTO `SOLD_ITEMS` (`DATE`, `CUSTOMER_ID`, `EMPLOYEE_ID`) VALUES ( ?, ?, ?)";
-    const values = [currentDate, 1, 1];
+    const values = [currentDate, cliente_id, 1];
     await conn.query(query, values);
 
     //def id_carro
